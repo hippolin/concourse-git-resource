@@ -13,6 +13,9 @@ PATH=/usr/local/bin:$PATH
 
 payload="$(cat <&0)"
 
+# for debugging
+echo $payload > /tmp/debug.json
+
 unknown_keys=$(jq --slurpfile schema "$(dirname $0)/source_schema.json" '(.source // [] | keys_unsorted) - ($schema[0] | keys_unsorted)' <<< "$payload")
 
 if jq --exit-status 'length > 0' <<< "$unknown_keys" &>/dev/null; then
